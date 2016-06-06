@@ -21,7 +21,8 @@ public:
 private:
 	void humanStep();
 	void mashineStep();
-	void checkWiner();
+	void checkWiner(char ch);
+	void checkEndTheGame();
 	Field<char> playField;
 	std::unique_ptr<GameFieldViewer> gameViwer;
 	int playerFlag = HUMAN;
