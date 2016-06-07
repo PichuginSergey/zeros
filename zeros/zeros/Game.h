@@ -23,6 +23,7 @@ private:
 	void mashineStep();
 	void checkWiner(char ch);
 	void checkEndTheGame();
+	bool checkSeq(Field<char>::FieldIterator& it);
 	Field<char> playField;
 	std::unique_ptr<GameFieldViewer> gameViwer;
 	int playerFlag = HUMAN;

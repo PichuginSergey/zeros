@@ -49,52 +49,46 @@ void Game::checkWiner(char ch) {
 	this->gameEndFlag = true;
 }
 
+bool Game::checkSeq(Field<char>::FieldIterator& it) {
+
+	char ch = *it;
+	size_t j = 0;
+	if (ch == 'X' || ch == 'O') {
+		for (j = 1; j < this->playField.getSize(); ++j) {
+			it++;
+			if (*it!= ch) break;
+		}
+	}
+	if (j == this->playField.getSize()) {
+		checkWiner(ch);
+		return true;
+	}
+	return false;
+}
+
 void Game::checkEndTheGame() {
 
 	// Check Row
 	for (size_t i = 0; i < this->playField.getSize(); ++i) {
-		
-		char ch = this->playField(i, 0);
-		size_t j = 0;
-		if (ch == 'X' || ch == 'O') {
-			for (j = 1; j < this->playField.getSize(); ++j)
-				if (playField(i, j) != ch) break;
-		}
-		if (j == this->playField.getSize()) 
-			checkWiner(ch);
+		Field<char>::FieldRowIterator it(playField, i);
+		if (checkSeq(it))
+			return;
 	}
 
 	// Check column
 	for (size_t i = 0; i < this->playField.getSize(); ++i) {
+		Field<char>::FieldColumnIterator it(playField, i);
+		if (checkSeq(it))
+			return;
+	}
+	// Check main diagonal
+	Field<char>::FieldDiagonalIterator it1(playField, Field<char>::FieldDiagonalIterator::MAIN_DIAGONAL);
+	if (checkSeq(it1))
+		return;
 
-		char ch = this->playField(0, i);
-		size_t j = 0;
-		if (ch == 'X' || ch == 'O') {
-			for (j = 1; j < this->playField.getSize(); ++j)
-				if (playField(j, i) != ch) break;
-		}
-		if (j == this->playField.getSize())
-			checkWiner(ch);
-	}
-	// Check diagonal
-	size_t i = 0;
-	char ch = this->playField(i, i);
-	if (ch == 'X' || ch == 'O') {
-		for (i = 1; i < this->playField.getSize(); ++i) {
-				if (playField(i, i) != ch) break;
-		}
-	}
-	if (i == this->playField.getSize())
-		checkWiner(ch);
-
-	i = 0;
-	ch = this->playField(i, this->playField.getSize() - 1);
-	if (ch == 'X' || ch == 'O') {
-		for (i = 1; i < this->playField.getSize(); ++i) {
-			if (playField(i, this->playField.getSize() - i - 1) != ch) break;
-		}
-	}
-	if (i == this->playField.getSize())
-		checkWiner(ch);
+	// Check other diagonal
+	Field<char>::FieldDiagonalIterator it2(playField, Field<char>::FieldDiagonalIterator::NO_MAIN_DIAGONAL);
+	if (checkSeq(it2))
+		return;
 }
 
